@@ -35,7 +35,7 @@ async function setup () {
 
 function draw () {
 
-	background(255);
+	background(200);
 
 	currentIndex = constrain(currentIndex+1,0,data.length);
 	console.log(currentIndex);
