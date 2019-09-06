@@ -6,29 +6,17 @@ let currentIndex = 0;
 async function setup () {
 	createCanvas(4 * 1920, 1080);
 
-	await d3.csv('temperatur_ch.csv', function (d) {
-		return {
-			time: +d.time,
-			temp: +d.jan
-		};
-	}).then(function (csv) {
-		data = csv;
-		console.log(data);
+	console.log('before load data');
+	data = await loadData('temperatur_ch.csv');
+	console.log('after load data');
+	console.log(data);
 
-		minTemp = d3.min(data, function (d) {
-			return d.temp;
-		});
-		maxTemp = d3.max(data, function (d) {
-			return d.temp;
-		});
-
-		// minTemp = -15;
-		// maxTemp = 5;
-		console.log(minTemp, maxTemp);
+	minTemp = d3.min(data, function (d) {
+		return d.temp;
 	});
-
-
-
+	maxTemp = d3.max(data, function (d) {
+		return d.temp;
+	});
 
 	frameRate(10);
 }
@@ -67,4 +55,20 @@ function draw () {
 		rect(x, 0, w, height);
 	}
 
+}
+
+async function loadData(file){
+
+	let theData = [];
+	await d3.csv(file, function (d) {
+		return {
+			time: +d.time,
+			temp: +d.jan
+		};
+	}).then(function (csv) {
+		theData = csv;
+	
+	});
+
+	return theData;
 }
