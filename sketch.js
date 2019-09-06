@@ -12,10 +12,10 @@ async function setup () {
 	console.log(data);
 
 	minTemp = d3.min(data, function (d) {
-		return d.temp;
+		return d.jan;
 	});
 	maxTemp = d3.max(data, function (d) {
-		return d.temp;
+		return d.jan;
 	});
 
 	frameRate(10);
@@ -39,7 +39,7 @@ function draw () {
 	for (let i = 0; i < currentIndex; i++) {
 		const d = data[i];
 		x = i * w;
-		let amt = map(d.temp, minTemp, maxTemp, 0, 1);
+		let amt = map(d.jan, minTemp, maxTemp, 0, 1);
 		//let col = 0;
 		// if (amt < 0.5) {
 		// 	col = lerpColor(from, middle, map(amt, 0, 0.5, 0, 1));
@@ -47,7 +47,7 @@ function draw () {
 		// else {
 		// 	col = lerpColor(middle, to, map(amt, 0.5, 1, 0, 1));
 		// }
-		console.log(d.temp, maxTemp, amt);
+		console.log(d.jan, maxTemp, amt);
 		colorMode(RGB);
 		let col = lerpColor(from, to, amt);
 		fill(col);
@@ -57,18 +57,3 @@ function draw () {
 
 }
 
-async function loadData(file){
-
-	let theData = [];
-	await d3.csv(file, function (d) {
-		return {
-			time: +d.time,
-			temp: +d.jan
-		};
-	}).then(function (csv) {
-		theData = csv;
-	
-	});
-
-	return theData;
-}
