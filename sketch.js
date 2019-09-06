@@ -6,9 +6,9 @@ let currentIndex = 0;
 async function setup () {
 	createCanvas(4 * 1920, 1080);
 
-	console.log('before load data');
+
 	data = await loadData('temperatur_ch.csv');
-	console.log('after load data');
+
 	console.log(data);
 
 	minTemp = d3.min(data, function (d) {
@@ -25,7 +25,7 @@ function draw () {
 
 	background(200);
 
-	currentIndex = constrain(currentIndex+1,0,data.length);
+	currentIndex = constrain(currentIndex + 1, 0, data.length);
 	console.log(currentIndex);
 
 
@@ -40,14 +40,6 @@ function draw () {
 		const d = data[i];
 		x = i * w;
 		let amt = map(d.jan, minTemp, maxTemp, 0, 1);
-		//let col = 0;
-		// if (amt < 0.5) {
-		// 	col = lerpColor(from, middle, map(amt, 0, 0.5, 0, 1));
-		// }
-		// else {
-		// 	col = lerpColor(middle, to, map(amt, 0.5, 1, 0, 1));
-		// }
-		console.log(d.jan, maxTemp, amt);
 		colorMode(RGB);
 		let col = lerpColor(from, to, amt);
 		fill(col);
