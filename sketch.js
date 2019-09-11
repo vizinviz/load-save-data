@@ -1,29 +1,46 @@
 let data = [];
 let minTemp = 0;
 let maxTemp = 0;
+let minYear = 0;
+let maxYear = 0;
 
-let colors = ['rgb(165,0,38)','rgb(215,48,39)','rgb(244,109,67)','rgb(253,174,97)','rgb(254,224,144)','rgb(255,255,191)','rgb(224,243,248)','rgb(171,217,233)','rgb(116,173,209)','rgb(69,117,180)','rgb(49,54,149)'];
-colors = colors.reverse();	
 let currentIndex = 0;
 let ready = false;
+
+
 async function setup () {
 	createCanvas(4 * 800, 600);
 
-
-	data = await loadData('temperatur_ch_long.csv');
+	data = await loadData('temperatur_ch.csv');
 	
 	console.log(data);
 
 	minTemp = d3.min(data, function (d) {
-		return d.temperature;
+		return d.mean_temp;
 	});
 	maxTemp = d3.max(data, function (d) {
-		return d.temperature;
+		return d.mean_temp;
+	});
+
+	minYear = d3.min(data,function(d){
+		return d.year;
+	});
+
+	maxYear = d3.max(data,function(d){
+		return d.year;
 	});
 
 	console.log('temps: ' , minTemp,maxTemp);
+	console.log('years: ' , minYear,maxYear);
 
 	frameRate(30);
+
+	//initialize animations
+	// for(var i=0; i<data[i].length;i++){
+	// 	let d = data[i];
+	// 	let animationId = 'diff_' + d.year;
+	// 	animate(animationId,0);
+	// }
 	ready = true;
 }
 
@@ -33,39 +50,44 @@ function draw () {
 		background(255,0,0);
 		return;
 	}
-	background(200);
+	background(0);
 	
-
-	currentIndex = constrain(currentIndex + 1, 0, data.length-1);
+	//change index every ten frames
+	if(frameCount  % 10 == 0){
+		currentIndex = constrain(currentIndex + 1, 0, data.length-1);
+	}
+	
 	//console.log(currentIndex);
 
+	//start animating the current data point
 
-	let w = width / data.length;
-	let x = 0;
-	colorMode(RGB);
-	let from = color('#FFC200');
-	let middle = color(255, 255, 0);
-	let to = color("#FF4B00");
-
-	for (let i = 0; i < currentIndex; i++) {
-		const d = data[i];
-		x = i * w;
-		//let amt = map(d.temperature, minTemp, maxTemp, 0, 1);
-		//colorMode(RGB);
-		//let col = lerpColor(from, to, amt);
-		//map value to color index
-		var colorIndex = floor(map(d.temperature, minTemp, maxTemp,0,colors.length-1));
-		var col = colors[colorIndex];
-		fill(col);
-		noStroke();
-		rect(x, 0, w, height);
+	for(var i=0; i<data.length; i++){
+		let d = data[i];
+		let x0 = map(d.year,minYear,maxYear,0,width);
+		
+		let xdiff = 0;
+		if(i<currentIndex){
+			//then calculate the x1 based on the temparature
+			 xdiff = map(d.mean_temp,minTemp,maxTemp,-100,100);
+		}
+		let animationId = 'diff_' + d.year;
+		let config = {
+			easing: LINEAR
+		};
+		let xdiffAmt = animate(animationId,xdiff,NUMBER,{ easing: isLINEAR, duration: 1000});
+		let x1 = x0+xdiffAmt;
+		stroke('white');
+		strokeWeight(7);
+		line(x1,0,x0,height);
 	}
 
 	noStroke();
-	fill(0);
+	fill(255);
+	rect(0,height-50,100,50);
 	
 	textSize(40);
-	text(data[currentIndex].time,100,100);
+	fill(0);
+	text(data[currentIndex].year,5,height-10);
 
 }
 
