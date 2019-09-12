@@ -1,16 +1,9 @@
-async function loadData(file){
-
-	let theData = [];
-	await d3.csv(file, function (d) {
+ function loadData(file){
+	return  d3.csv(file, function (d) {
 		return autocast(d);
-	}).then(function (csv) {
-		theData = csv;
-	
 	});
 
-	return theData;
 }
-
 
 function autocast(d) {
 	let keys = _.keys(d);
