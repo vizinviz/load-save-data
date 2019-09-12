@@ -1,3 +1,5 @@
+/// <reference path="./libraries/p5.global-mode.d.ts" />
+
 let data = [];
 let minTemp = 0;
 let maxTemp = 0;
@@ -11,7 +13,6 @@ async function setup () {
 	createCanvas(4 * 800, 600);
 
 	data = await loadData('temperatur.csv');
-
 	console.log(data);
 
 	minTemp = minprop(data,'mean_temp');
