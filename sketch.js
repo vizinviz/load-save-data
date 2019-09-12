@@ -25,7 +25,6 @@ async function setup () {
 	minYear = d3.min(data, function (d) {
 		return d.year;
 	});
-
 	maxYear = d3.max(data, function (d) {
 		return d.year;
 	});
