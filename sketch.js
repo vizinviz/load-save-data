@@ -45,7 +45,6 @@ function draw () {
 		noStroke();
 		fill(darkness);
 		rect(x,0,20,height);
-
 	}
 }
 
