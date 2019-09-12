@@ -7,14 +7,13 @@ let maxYear = 0;
 let currentIndex = 0;
 let ready = false;
 
-
 async function setup () {
 	createCanvas(4 * 800, 600);
 
-	data =  await loadData('temperatur.csv');
+	data = await loadData('temperatur.csv');
 
 	console.log(data);
-	
+
 	minTemp = d3.min(data, function (d) {
 		return d.mean_temp;
 	});
