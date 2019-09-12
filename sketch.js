@@ -11,7 +11,7 @@ let ready = false;
 async function setup () {
 	createCanvas(4 * 800, 600);
 
-	data = await loadData('temperatur_ch.csv');
+	data = await loadData('temperatur.csv');
 
 	console.log(data);
 
@@ -30,7 +30,7 @@ async function setup () {
 		return d.year;
 	});
 
-	console.log('temps: ', minTemp, maxTemp);
+	console.log('temperatures: ', minTemp, maxTemp);
 	console.log('years: ', minYear, maxYear);
 
 	frameRate(30);
@@ -40,7 +40,6 @@ async function setup () {
 		let d = data[i];
 		d.x0 = map(d.year, minYear, maxYear, 0, width);
 		d.x1 = map(d.year, minYear, maxYear, 0, width);
-
 	}
 
 	ready = true;
