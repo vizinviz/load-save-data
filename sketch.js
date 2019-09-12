@@ -14,71 +14,39 @@ async function setup () {
 
 	console.log(data);
 
-	minTemp = d3.min(data, function (d) {
-		return d.mean_temp;
-	});
-	maxTemp = d3.max(data, function (d) {
-		return d.mean_temp;
-	});
+	minTemp = minprop(data,'mean_temp');
+	maxTemp = maxprop(data,'mean_temp');
 
-	minYear = d3.min(data, function (d) {
-		return d.year;
-	});
-	maxYear = d3.max(data, function (d) {
-		return d.year;
-	});
+	minYear = minprop(data,'year');
+	maxYear = maxprop(data,'year');
 
 	console.log('temperatures: ', minTemp, maxTemp);
 	console.log('years: ', minYear, maxYear);
 
 	frameRate(30);
 
-	//initalize positions
-	for (var i = 0; i < data.length; i++) {
-		let d = data[i];
-		d.x0 = map(d.year, minYear, maxYear, 0, width);
-		d.x1 = map(d.year, minYear, maxYear, 0, width);
-	}
-
 	ready = true;
 }
 
 function draw () {
 
+	//red backround if not ready
 	if (!ready) {
 		background(255, 0, 0);
 		return;
 	}
-	background(0);
-
-	//change index every ten frames
-	if (frameCount % 10 == 0) {
-		currentIndex = constrain(currentIndex + 1, 0, data.length - 1);
-	}
+	background(255);
 
 	for (var i = 0; i < data.length; i++) {
 		let d = data[i];
 
-		let xdiff = 0;
-		if (i < currentIndex) {
-			//then calculate the x1 based on the temparature
-			xdiff = map(d.mean_temp, minTemp, maxTemp, -100, 100);
-		}
+		let x = map(d.year,minYear,maxYear,0,width);
+		let darkness = map(d.mean_temp,minTemp,maxTemp,255,0);
+		noStroke();
+		fill(darkness);
+		rect(x,0,20,height);
 
-		d.x1 = ease(d.x1, d.x0 + xdiff);
-		stroke('white');
-		strokeWeight(7);
-		line(d.x1, 0, d.x0, height);
 	}
-
-	noStroke();
-	fill(255);
-	rect(0, height - 50, 100, 50);
-
-	textSize(40);
-	fill(0);
-	text(data[currentIndex].year, 5, height - 10);
-
 }
 
 function ease (n, target) {
