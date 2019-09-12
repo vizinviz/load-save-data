@@ -49,9 +49,4 @@ function draw () {
 	}
 }
 
-function ease (n, target) {
-	var easing = 0.05;
-	var d = target - n;
-	return n + d * easing;
-}
 
