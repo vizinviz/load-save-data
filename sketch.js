@@ -49,4 +49,9 @@ function draw () {
 	}
 }
 
+function keyTyped(){
+	console.log('savecanvas');
+	saveCanvas('myCanvas');
+}
+
 
